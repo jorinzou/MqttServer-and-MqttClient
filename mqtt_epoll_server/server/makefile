@@ -1,22 +1,20 @@
 CC=gcc
 
-OBJ=MqttServer
+OBJ=server
 all:$(OBJ)
 
-HERE=./
-incs=-I$(HERE)  
+HERE=$(shell pwd)
+incs=-I$(HERE)
 
-files:=$(HERE)/main.c
-files+=$(HERE)/SocketServer.c
-files+=$(HERE)/cJSON.c
-files+=$(HERE)/mqtt.c
+SRC=$(HERE)/src/
+files:=$(foreach dir,$(SRC),$(wildcard $(SRC)/*.c))
 
 OBJS_C := $(patsubst %.c,%.o,$(files))
 
 CFLAGS=-O0 -g 
 CFLAGS+=$(incs) 
 
-LDFLAGS=-lpthread 
+LDFLAGS:=-lpthread 
 LDFLAGS+=-lm
 LDFLAGS+=-ldl
 
@@ -27,6 +25,6 @@ $(OBJS_C):%.o:%.c
 	$(CC) $(CFLAGS)  -c $< -o $@
 
 clean:
-	rm -rf $(HERE)*.o
+	rm -rf $(HERE)/*.o
 	rm -rf $(HERE)/$(OBJ)
 
